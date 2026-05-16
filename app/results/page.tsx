@@ -91,7 +91,7 @@ export default function ResultsPage() {
       <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
 
         {/* KPI strip */}
-        <KpiStrip year1={results.year1} cumulativeTotal={results.cumulativeTotal} valuation={results.valuation} primaryColor={data.primaryColor} />
+        <KpiStrip year1={results.year1} cumulativeTotal={results.cumulativeTotal} valuation={results.valuation} />
 
         {/* Compliance disclaimer */}
         <div className="rounded-xl px-4 py-3" style={{ background: 'var(--surface-card)', border: '1px solid var(--hairline)' }}>

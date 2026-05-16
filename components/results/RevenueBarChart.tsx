@@ -20,7 +20,7 @@ export default function RevenueBarChart({ results, primaryColor, secondaryColor 
 
   return (
     <div>
-      <h3 className="text-base font-bold mb-4" style={{ color: 'var(--ink)' }}>Revenue by Stream</h3>
+      <p className="text-xs uppercase tracking-widest font-semibold mb-4" style={{ color: 'var(--muted)' }}>Revenue by Stream</p>
       <div className="space-y-3">
         {rows.map((row, i) => {
           const pct = (row.value / max) * 100

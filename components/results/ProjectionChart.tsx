@@ -27,7 +27,7 @@ export default function ProjectionChart({ projection, primaryColor }: Props) {
 
   return (
     <div>
-      <h3 className="text-base font-bold mb-4" style={{ color: 'var(--ink)' }}>5-Year Revenue Projection</h3>
+      <p className="text-xs uppercase tracking-widest font-semibold mb-4" style={{ color: 'var(--muted)' }}>5-Year Revenue Projection</p>
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ overflow: 'visible' }}>
         <defs>
           <linearGradient id="proj-fill" x1="0" y1="0" x2="0" y2="1">

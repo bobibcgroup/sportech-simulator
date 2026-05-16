@@ -8,7 +8,6 @@ import WinBadges from '@/components/results/WinBadges'
 import ViewToggle from '@/components/results/ViewToggle'
 import DashboardView from '@/components/results/DashboardView'
 import ReportView from '@/components/results/ReportView'
-import DownloadPDFButton from '@/components/pdf/DownloadPDFButton'
 
 const fmtUSD = (n: number) =>
   n >= 1_000_000 ? `$${(n / 1_000_000).toFixed(2)}M`
@@ -85,7 +84,6 @@ export default function ResultsPage() {
           </div>
           <div className="flex items-center gap-3">
             <ViewToggle view={view} onChange={setView} />
-            <DownloadPDFButton data={data} results={results} />
           </div>
         </div>
       </header>

@@ -23,11 +23,26 @@ export interface ModelParams {
   merch_star: number
   merch_superstar: number
   merch_partner: number
-  // Token economy (USD/month)
+  // Token economy (USD/month) — used for Digital Gift Cards calculation
   tokens_fan: number
   tokens_star: number
   tokens_superstar: number
   tokens_partner: number
+  // Interactive Voting (USD/month)
+  voting_fan: number
+  voting_star: number
+  voting_superstar: number
+  voting_partner: number
+  // Tickets — platform commission (USD/month)
+  ticket_fan: number
+  ticket_star: number
+  ticket_superstar: number
+  ticket_partner: number
+  // NFT & Collectibles (USD/month)
+  nft_fan: number
+  nft_star: number
+  nft_superstar: number
+  nft_partner: number
   // Platform rates
   token_fee_rate: number
   merch_margin: number
@@ -68,6 +83,18 @@ export const DEFAULT_PARAMS: ModelParams = {
   tokens_star: 200.88,
   tokens_superstar: 401.76,
   tokens_partner: 502.20,
+  voting_fan: 0,
+  voting_star: 1.50,
+  voting_superstar: 4.00,
+  voting_partner: 8.00,
+  ticket_fan: 1.50,
+  ticket_star: 4.50,
+  ticket_superstar: 11.00,
+  ticket_partner: 22.00,
+  nft_fan: 0.50,
+  nft_star: 3.00,
+  nft_superstar: 8.00,
+  nft_partner: 18.00,
   token_fee_rate: 0.0078,
   merch_margin: 0.48,
   participation_rate: 0.50,

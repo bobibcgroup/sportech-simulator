@@ -25,12 +25,14 @@ export default function Step4BlurredPreview({ data, onNext, onBack }: Props) {
   }, [])
 
   const streams = [
-    { label: 'Subscriptions', value: r.subscriptions },
-    { label: 'Predictions', value: r.predictions },
-    { label: 'Virtual Gifts', value: r.virtualGifts },
-    { label: 'Merchandise', value: r.merchandise },
-    { label: 'Tokens', value: r.tokenFees },
-    { label: 'Digital Cards', value: r.digitalCards },
+    { label: 'Subscriptions',  value: r.subscriptions },
+    { label: 'Predictions',    value: r.predictions },
+    { label: 'Live Gifting',   value: r.virtualGifts },
+    { label: 'Merchandise',    value: r.merchandise },
+    { label: 'Gift Cards',     value: r.digitalCards },
+    { label: 'Voting',         value: r.voting },
+    { label: 'Tickets',        value: r.tickets },
+    { label: 'NFTs',           value: r.nftCollectibles },
   ]
 
   return (

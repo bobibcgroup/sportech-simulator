@@ -46,12 +46,14 @@ export default function Step3Numbers({ data, update, onNext, onBack }: Props) {
   const results = calculate(data)
 
   const streams = [
-    { label: 'Subscriptions', value: results.subscriptions },
-    { label: 'Predictions', value: results.predictions },
-    { label: 'Virtual Gifts', value: results.virtualGifts },
-    { label: 'Merchandise', value: results.merchandise },
-    { label: 'Token Fees', value: results.tokenFees },
-    { label: 'Digital Cards', value: results.digitalCards },
+    { label: 'Subscriptions',      value: results.subscriptions },
+    { label: 'Predictions',        value: results.predictions },
+    { label: 'Live Gifting',       value: results.virtualGifts },
+    { label: 'Merchandise',        value: results.merchandise },
+    { label: 'Gift Cards',         value: results.digitalCards },
+    { label: 'Voting',             value: results.voting },
+    { label: 'Tickets',            value: results.tickets },
+    { label: 'NFTs',               value: results.nftCollectibles },
   ]
 
   return (

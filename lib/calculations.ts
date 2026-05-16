@@ -46,8 +46,6 @@ export function computeRevenue(
     paidPartners   * p.gift_games_rate * p.participation_rate * p.gift_partner   * 12 * games
   ) * sm
 
-  const tokenFees = (predictions + virtualGifts) * p.token_fee_rate
-
   const merchandise = (
     freeFans       * p.participation_rate * p.merch_fan       * 12 * p.merch_margin +
     paidStars      * p.participation_rate * p.merch_star      * 12 * p.merch_margin +
@@ -62,7 +60,28 @@ export function computeRevenue(
     paidPartners   * p.participation_rate * p.tokens_partner   * 12 * p.token_fee_rate
   ) * sm
 
-  return { subscriptions, predictions, virtualGifts, tokenFees, merchandise, digitalCards }
+  const voting = (
+    freeFans       * p.participation_rate * p.voting_fan       * 12 +
+    paidStars      * p.participation_rate * p.voting_star      * 12 +
+    paidSuperStars * p.participation_rate * p.voting_superstar * 12 +
+    paidPartners   * p.participation_rate * p.voting_partner   * 12
+  ) * sm
+
+  const tickets = (
+    freeFans       * p.participation_rate * p.ticket_fan       * 12 +
+    paidStars      * p.participation_rate * p.ticket_star      * 12 +
+    paidSuperStars * p.participation_rate * p.ticket_superstar * 12 +
+    paidPartners   * p.participation_rate * p.ticket_partner   * 12
+  ) * sm
+
+  const nftCollectibles = (
+    freeFans       * p.participation_rate * p.nft_fan          * 12 +
+    paidStars      * p.participation_rate * p.nft_star         * 12 +
+    paidSuperStars * p.participation_rate * p.nft_superstar    * 12 +
+    paidPartners   * p.participation_rate * p.nft_partner      * 12
+  ) * sm
+
+  return { subscriptions, predictions, virtualGifts, merchandise, digitalCards, voting, tickets, nftCollectibles }
 }
 
 export function calculate(data: WizardData, params: ModelParams = DEFAULT_PARAMS): RevenueResults {

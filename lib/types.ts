@@ -34,9 +34,11 @@ export interface RevenueResults {
   subscriptions: number
   predictions: number
   virtualGifts: number
-  tokenFees: number
   merchandise: number
   digitalCards: number
+  voting: number
+  tickets: number
+  nftCollectibles: number
   grossRevenue: number
   clubRevenue: number
   year1: number

@@ -59,12 +59,14 @@ export default function DashboardView({ data, results }: Props) {
   const tierSuperPct = tiers.totalPaid > 0 ? tiers.paidSuperStars / tiers.totalPaid : 0
 
   const streams = [
-    { label: 'Subscriptions',  value: results.subscriptions,  icon: '👑' },
-    { label: 'Predictions',    value: results.predictions,    icon: '🎯' },
-    { label: 'Merchandise',    value: results.merchandise,    icon: '👕' },
-    { label: 'Virtual Gifts',  value: results.virtualGifts,   icon: '🎁' },
-    { label: 'Token Fees',     value: results.tokenFees,      icon: '🪙' },
-    { label: 'Digital Cards',  value: results.digitalCards,   icon: '🃏' },
+    { label: 'Subscriptions',      value: results.subscriptions,    icon: '👑' },
+    { label: 'Predictions',        value: results.predictions,      icon: '🎯' },
+    { label: 'Live Gifting',       value: results.virtualGifts,     icon: '🎁' },
+    { label: 'Merchandise',        value: results.merchandise,      icon: '👕' },
+    { label: 'Digital Gift Cards', value: results.digitalCards,     icon: '🃏' },
+    { label: 'Interactive Voting', value: results.voting,           icon: '🗳️' },
+    { label: 'Tickets',            value: results.tickets,          icon: '🎟️' },
+    { label: 'NFT & Collectibles', value: results.nftCollectibles,  icon: '✨' },
   ].sort((a, b) => b.value - a.value)
 
   return (
@@ -118,7 +120,7 @@ export default function DashboardView({ data, results }: Props) {
           </div>
 
           {/* Step 3: Revenue streams */}
-          <SectionLabel>Step 3 — Revenue Streams (admin: sub_*, pred_*, gift_*, merch_*, tokens_*)</SectionLabel>
+          <SectionLabel>Step 3 — Revenue Streams (admin: sub_*, pred_*, gift_*, merch_*, tokens_*, voting_*, ticket_*, nft_*)</SectionLabel>
           <div className="rounded-lg overflow-hidden" style={{ border: '1px solid var(--hairline)' }}>
             <div className="px-4" style={{ background: 'var(--surface-card)' }}>
               {streams.map(s => (

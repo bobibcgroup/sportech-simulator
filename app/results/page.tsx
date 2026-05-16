@@ -5,26 +5,12 @@ import { calculate } from '@/lib/calculations'
 import type { WizardData, RevenueResults } from '@/lib/types'
 import KpiStrip from '@/components/results/KpiStrip'
 import WinBadges from '@/components/results/WinBadges'
-import ViewToggle from '@/components/results/ViewToggle'
 import DashboardView from '@/components/results/DashboardView'
-import ReportView from '@/components/results/ReportView'
-
-const fmtUSD = (n: number) =>
-  n >= 1_000_000 ? `$${(n / 1_000_000).toFixed(2)}M`
-  : n >= 1_000 ? `$${(n / 1_000).toFixed(0)}K`
-  : `$${n.toFixed(0)}`
-
-const fmt = (n: number) =>
-  n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)}M`
-  : n >= 1_000 ? `${(n / 1_000).toFixed(0)}K`
-  : String(Math.round(n))
 
 export default function ResultsPage() {
   const router = useRouter()
   const [data, setData] = useState<WizardData | null>(null)
   const [results, setResults] = useState<RevenueResults | null>(null)
-  const [view, setView] = useState<'dashboard' | 'report'>('dashboard')
-  const [showBreakdown, setShowBreakdown] = useState(false)
   const loaded = useRef(false)
 
   useEffect(() => {
@@ -55,15 +41,6 @@ export default function ResultsPage() {
     </div>
   )
 
-  const streams = [
-    { label: 'Subscriptions', value: results.subscriptions, icon: '💳' },
-    { label: 'Predictions', value: results.predictions, icon: '🎯' },
-    { label: 'Virtual Gifts', value: results.virtualGifts, icon: '🎁' },
-    { label: 'Merchandise', value: results.merchandise, icon: '👕' },
-    { label: 'Token Fees', value: results.tokenFees, icon: '🪙' },
-    { label: 'Digital Cards', value: results.digitalCards, icon: '🃏' },
-  ]
-
   return (
     <div className="min-h-screen" style={{ background: 'var(--canvas)' }}>
       {/* Sticky header */}
@@ -82,9 +59,7 @@ export default function ResultsPage() {
               <p className="text-xs hidden sm:block" style={{ color: 'var(--muted)' }}>Revenue Simulation 2025–2030</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <ViewToggle view={view} onChange={setView} />
-          </div>
+          <div className="flex items-center gap-3" />
         </div>
       </header>
 
@@ -103,106 +78,7 @@ export default function ResultsPage() {
 
         <WinBadges />
 
-        {/* Revenue breakdown */}
-        <div className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--hairline)' }}>
-          <button
-            type="button"
-            onClick={() => setShowBreakdown(v => !v)}
-            className="w-full flex items-center justify-between px-5 py-4"
-            style={{ background: 'var(--surface-card)' }}
-          >
-            <div>
-              <p className="text-sm font-bold text-left" style={{ color: 'var(--ink)' }}>Revenue breakdown</p>
-              <p className="text-xs text-left" style={{ color: 'var(--muted)' }}>See how the numbers are built</p>
-            </div>
-            <span className="text-xs font-semibold" style={{ color: 'var(--primary)' }}>{showBreakdown ? '▲ Hide' : '▼ Show'}</span>
-          </button>
-
-          {showBreakdown && (
-            <div className="px-5 pb-5 pt-4 space-y-6" style={{ background: 'var(--surface-soft)' }}>
-
-              {/* Audience tiers */}
-              <div>
-                <p className="text-xs uppercase tracking-widest mb-3" style={{ color: 'var(--muted)' }}>Audience tiers</p>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  {[
-                    { label: 'Free Fans', value: fmt(results.tiers.freeFans) },
-                    { label: 'Stars (paid)', value: fmt(results.tiers.paidStars) },
-                    { label: 'SuperStars', value: fmt(results.tiers.paidSuperStars) },
-                    { label: 'Partners', value: fmt(results.tiers.paidPartners) },
-                  ].map(t => (
-                    <div key={t.label} className="rounded-lg p-3 text-center" style={{ background: 'var(--surface-card)' }}>
-                      <p className="text-lg font-black" style={{ color: 'var(--primary)' }}>{t.value}</p>
-                      <p className="text-xs mt-0.5" style={{ color: 'var(--muted)' }}>{t.label}</p>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-[11px] mt-2" style={{ color: 'var(--muted-soft)' }}>
-                  Based on {Math.round(data.fanBase / 1_000_000 * 10) / 10}M global fans × {Math.round(data.adoptionPct * 100)}% adoption × {Math.round(data.premiumMix * 100)}% premium
-                </p>
-              </div>
-
-              {/* Revenue streams */}
-              <div>
-                <p className="text-xs uppercase tracking-widest mb-3" style={{ color: 'var(--muted)' }}>Revenue streams (Year 1 gross)</p>
-                <div className="space-y-2">
-                  {streams.map(s => {
-                    const pct = results.grossRevenue > 0 ? (s.value / results.grossRevenue) * 100 : 0
-                    return (
-                      <div key={s.label}>
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs" style={{ color: 'var(--body)' }}>{s.icon} {s.label}</span>
-                          <span className="text-xs font-bold" style={{ color: 'var(--ink)' }}>{fmtUSD(s.value)}</span>
-                        </div>
-                        <div className="h-1.5 rounded-full" style={{ background: 'var(--hairline)' }}>
-                          <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: 'var(--primary)' }} />
-                        </div>
-                        <p className="text-[10px] mt-0.5 text-right" style={{ color: 'var(--muted)' }}>{pct.toFixed(1)}% of gross</p>
-                      </div>
-                    )
-                  })}
-                </div>
-
-                <div className="mt-4 pt-4 space-y-1" style={{ borderTop: '1px solid var(--hairline)' }}>
-                  <div className="flex justify-between text-sm font-bold">
-                    <span style={{ color: 'var(--body-strong)' }}>Gross platform revenue</span>
-                    <span style={{ color: 'var(--ink)' }}>{fmtUSD(results.grossRevenue)}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span style={{ color: 'var(--muted)' }}>Club revenue share (up to)</span>
-                    <span style={{ color: 'var(--primary)', fontWeight: 700 }}>{fmtUSD(results.year1)}</span>
-                  </div>
-                  <p className="text-[11px] pt-1" style={{ color: 'var(--muted-soft)' }}>
-                    * The revenue split between the club and SporTech is determined by the specific deal and engagement terms agreed. The figure above is illustrative only.
-                  </p>
-                </div>
-              </div>
-
-              {/* 5-year projection */}
-              <div>
-                <p className="text-xs uppercase tracking-widest mb-3" style={{ color: 'var(--muted)' }}>5-Year projection</p>
-                <div className="grid grid-cols-5 gap-1">
-                  {results.projection.map((v, i) => {
-                    const maxV = Math.max(...results.projection)
-                    const barH = maxV > 0 ? (v / maxV) * 60 : 0
-                    return (
-                      <div key={i} className="flex flex-col items-center gap-1">
-                        <span className="text-[10px] font-bold" style={{ color: 'var(--primary)' }}>{fmtUSD(v)}</span>
-                        <div className="w-full rounded-sm" style={{ height: `${barH}px`, minHeight: 4, background: 'var(--primary)', opacity: 0.3 + (i / 5) * 0.7 }} />
-                        <span className="text-[10px]" style={{ color: 'var(--muted)' }}>Yr {i + 1}</span>
-                      </div>
-                    )
-                  })}
-                </div>
-                <p className="text-[11px] mt-2" style={{ color: 'var(--muted-soft)' }}>
-                  Growth projections are indicative and assume consistent adoption, engagement, and agreed deal terms throughout the period.
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {view === 'dashboard' ? <DashboardView data={data} results={results} /> : <ReportView data={data} results={results} />}
+        <DashboardView data={data} results={results} />
 
         {/* CTA band */}
         <div className="rounded-xl p-8 text-center" style={{ background: 'var(--primary)' }}>

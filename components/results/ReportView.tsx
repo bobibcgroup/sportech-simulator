@@ -1,8 +1,6 @@
-import dynamic from 'next/dynamic'
 import type { WizardData, RevenueResults } from '@/lib/types'
 import StreamCards from './StreamCards'
-
-const ProjectionChart = dynamic(() => import('./ProjectionChart'), { ssr: false })
+import ProjectionChart from './ProjectionChart'
 
 const fmtM = (n: number) => `$${(n / 1_000_000).toFixed(1)}M`
 

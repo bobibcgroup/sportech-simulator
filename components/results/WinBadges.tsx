@@ -2,7 +2,7 @@ const WINS = [
   { icon: '🛡️', title: 'Zero risk to club', desc: 'SporTech builds and operates everything at our cost' },
   { icon: '⚡', title: 'Live in weeks', desc: 'Not months — full platform deployed rapidly' },
   { icon: '💰', title: 'Revenue share yours', desc: 'Significant share of all streams, terms agreed per deal' },
-  { icon: '⭐', title: 'Players earn too', desc: 'Players get 30% of virtual gifts — they\'re motivated' },
+  { icon: '⭐', title: 'Player incentives', desc: 'Clubs can choose to reward players from gifting revenue — keeping squad and fans engaged' },
 ]
 
 export default function WinBadges() {

@@ -33,8 +33,7 @@ export default function WizardShell() {
   const [data, setData] = useState<WizardData>(emptyWizard)
 
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved) { try { setData(JSON.parse(saved)) } catch {} }
+    localStorage.removeItem(STORAGE_KEY)
   }, [])
 
   const update = (partial: Partial<WizardData>) => {

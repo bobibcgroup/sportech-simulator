@@ -31,6 +31,14 @@ export default async function AdminDashboard() {
           <h1 className="text-lg font-bold text-slate-900">SporTech Admin</h1>
           <p className="text-xs text-slate-400">{stats.totalLeads} total leads</p>
         </div>
+        <div className="flex items-center gap-4">
+          <a
+            href="/admin/parameters"
+            className="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
+          >
+            Model Parameters →
+          </a>
+        </div>
         <form action="/api/admin/logout" method="POST">
           <button type="submit" className="text-sm text-slate-400 hover:text-slate-600">Sign out</button>
         </form>

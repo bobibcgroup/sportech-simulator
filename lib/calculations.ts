@@ -1,79 +1,93 @@
 import type { WizardData, TierUsers, RevenueResults } from './types'
-import {
-  SPEND_MULTIPLIERS, SUB_ANNUAL_USD, PRED_MONTHLY_USD,
-  GIFT_MONTHLY_USD, MERCH_MONTHLY_USD, TOKENS_MONTHLY_USD,
-  TOKEN_FEE_RATE, MERCH_MARGIN, PARTICIPATION_RATE,
-  GIFT_GAMES_RATE, CLUB_REVENUE_SHARE, EARNINGS_MULTIPLE, GROWTH_RATES,
-} from './constants'
+import type { ModelParams } from './model-params'
+import { DEFAULT_PARAMS } from './model-params'
 
 export function computeTiers(
   fanBase: number,
   adoptionPct: number,
-  premiumMix: number
+  premiumMix: number,
+  params: ModelParams = DEFAULT_PARAMS
 ): TierUsers {
   const totalActive = Math.round(fanBase * adoptionPct)
   const totalPaid = Math.round(totalActive * premiumMix)
-  const paidStars = Math.round(totalPaid * 0.75)
-  const paidSuperStars = Math.round(totalPaid * 0.225)
+  const paidStars = Math.round(totalPaid * params.tier_star_pct)
+  const paidSuperStars = Math.round(totalPaid * params.tier_superstar_pct)
   const paidPartners = totalPaid - paidStars - paidSuperStars
   const freeFans = totalActive - totalPaid
   return { freeFans, paidStars, paidSuperStars, paidPartners, totalActive, totalPaid }
 }
 
-export function computeRevenue(tiers: TierUsers, games: number, sm: number) {
+export function computeRevenue(
+  tiers: TierUsers,
+  games: number,
+  sm: number,
+  params: ModelParams = DEFAULT_PARAMS
+) {
   const { freeFans, paidStars, paidSuperStars, paidPartners } = tiers
+  const p = params
 
   const subscriptions = (
-    paidStars * SUB_ANNUAL_USD.star +
-    paidSuperStars * SUB_ANNUAL_USD.superStar +
-    paidPartners * SUB_ANNUAL_USD.partner
+    paidStars * p.sub_star +
+    paidSuperStars * p.sub_superstar +
+    paidPartners * p.sub_partner
   ) * sm
 
   const predictions = (
-    freeFans * PARTICIPATION_RATE * PRED_MONTHLY_USD.fan * 12 +
-    paidStars * PARTICIPATION_RATE * PRED_MONTHLY_USD.star * 12 +
-    paidSuperStars * PARTICIPATION_RATE * PRED_MONTHLY_USD.superStar * 12 +
-    paidPartners * PARTICIPATION_RATE * PRED_MONTHLY_USD.partner * 12
+    freeFans       * p.participation_rate * p.pred_fan       * 12 +
+    paidStars      * p.participation_rate * p.pred_star      * 12 +
+    paidSuperStars * p.participation_rate * p.pred_superstar * 12 +
+    paidPartners   * p.participation_rate * p.pred_partner   * 12
   ) * sm
 
   const virtualGifts = (
-    freeFans * GIFT_GAMES_RATE * PARTICIPATION_RATE * GIFT_MONTHLY_USD.fan * 12 * games +
-    paidStars * GIFT_GAMES_RATE * PARTICIPATION_RATE * GIFT_MONTHLY_USD.star * 12 * games +
-    paidSuperStars * GIFT_GAMES_RATE * PARTICIPATION_RATE * GIFT_MONTHLY_USD.superStar * 12 * games +
-    paidPartners * GIFT_GAMES_RATE * PARTICIPATION_RATE * GIFT_MONTHLY_USD.partner * 12 * games
+    freeFans       * p.gift_games_rate * p.participation_rate * p.gift_fan       * 12 * games +
+    paidStars      * p.gift_games_rate * p.participation_rate * p.gift_star      * 12 * games +
+    paidSuperStars * p.gift_games_rate * p.participation_rate * p.gift_superstar * 12 * games +
+    paidPartners   * p.gift_games_rate * p.participation_rate * p.gift_partner   * 12 * games
   ) * sm
 
-  const tokenFees = (predictions + virtualGifts) * TOKEN_FEE_RATE
+  const tokenFees = (predictions + virtualGifts) * p.token_fee_rate
 
   const merchandise = (
-    freeFans * PARTICIPATION_RATE * MERCH_MONTHLY_USD.fan * 12 * MERCH_MARGIN +
-    paidStars * PARTICIPATION_RATE * MERCH_MONTHLY_USD.star * 12 * MERCH_MARGIN +
-    paidSuperStars * PARTICIPATION_RATE * MERCH_MONTHLY_USD.superStar * 12 * MERCH_MARGIN +
-    paidPartners * PARTICIPATION_RATE * MERCH_MONTHLY_USD.partner * 12 * MERCH_MARGIN
+    freeFans       * p.participation_rate * p.merch_fan       * 12 * p.merch_margin +
+    paidStars      * p.participation_rate * p.merch_star      * 12 * p.merch_margin +
+    paidSuperStars * p.participation_rate * p.merch_superstar * 12 * p.merch_margin +
+    paidPartners   * p.participation_rate * p.merch_partner   * 12 * p.merch_margin
   ) * sm
 
   const digitalCards = (
-    freeFans * PARTICIPATION_RATE * TOKENS_MONTHLY_USD.fan * 12 * TOKEN_FEE_RATE +
-    paidStars * PARTICIPATION_RATE * TOKENS_MONTHLY_USD.star * 12 * TOKEN_FEE_RATE +
-    paidSuperStars * PARTICIPATION_RATE * TOKENS_MONTHLY_USD.superStar * 12 * TOKEN_FEE_RATE +
-    paidPartners * PARTICIPATION_RATE * TOKENS_MONTHLY_USD.partner * 12 * TOKEN_FEE_RATE
+    freeFans       * p.participation_rate * p.tokens_fan       * 12 * p.token_fee_rate +
+    paidStars      * p.participation_rate * p.tokens_star      * 12 * p.token_fee_rate +
+    paidSuperStars * p.participation_rate * p.tokens_superstar * 12 * p.token_fee_rate +
+    paidPartners   * p.participation_rate * p.tokens_partner   * 12 * p.token_fee_rate
   ) * sm
 
   return { subscriptions, predictions, virtualGifts, tokenFees, merchandise, digitalCards }
 }
 
-export function calculate(data: WizardData): RevenueResults {
-  const sm = SPEND_MULTIPLIERS[data.spendLevel]
-  const tiers = computeTiers(data.fanBase, data.adoptionPct, data.premiumMix)
-  const streams = computeRevenue(tiers, data.gamesPerSeason, sm)
+export function calculate(data: WizardData, params: ModelParams = DEFAULT_PARAMS): RevenueResults {
+  const spendMap: Record<string, number> = {
+    low: params.spend_low,
+    standard: params.spend_standard,
+    high: params.spend_high,
+  }
+  const sm = spendMap[data.spendLevel] ?? params.spend_standard
+
+  const tiers = computeTiers(data.fanBase, data.adoptionPct, data.premiumMix, params)
+  const streams = computeRevenue(tiers, data.gamesPerSeason, sm, params)
 
   const grossRevenue = Object.values(streams).reduce((a, b) => a + b, 0)
-  const clubRevenue = grossRevenue * CLUB_REVENUE_SHARE
+  const clubRevenue = grossRevenue * params.club_revenue_share
   const year1 = clubRevenue
 
-  const projection = GROWTH_RATES.map(r => year1 * r)
+  const yr2 = year1 * params.growth_yr2
+  const yr3 = yr2   * params.growth_yr3
+  const yr4 = yr3   * params.growth_yr4
+  const yr5 = yr4   * params.growth_yr5
+  const projection = [year1, yr2, yr3, yr4, yr5]
+
   const cumulativeTotal = projection.reduce((a, b) => a + b, 0)
-  const valuation = projection[4] * EARNINGS_MULTIPLE
+  const valuation = yr5 * params.earnings_multiple
 
   return { tiers, ...streams, grossRevenue, clubRevenue, year1, projection, cumulativeTotal, valuation }
 }

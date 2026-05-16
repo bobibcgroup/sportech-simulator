@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { calculate } from '@/lib/calculations'
 import type { WizardData } from '@/lib/types'
 
 interface Props { data: WizardData; update: (p: Partial<WizardData>) => void; onBack: () => void }
@@ -26,31 +25,30 @@ export default function Step5Contact({ data, update, onBack }: Props) {
     setError('')
 
     try {
-      const results = calculate(data)
       const res = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          club_name: data.clubName,
-          sport: data.sport,
-          region: data.region,
-          fan_base: data.fanBase,
-          adoption: data.adoptionPct,
-          premium_mix: data.premiumMix,
-          games: data.gamesPerSeason,
-          spend_level: data.spendLevel,
-          name: data.contactName,
-          email: data.contactEmail,
-          role: data.contactRole,
-          website: data.contactWebsite,
-          year1_rev: results.year1,
-          year5_total: results.cumulativeTotal,
-          valuation: results.valuation,
+          club_name:       data.clubName,
+          sport:           data.sport,
+          region:          data.region,
+          primary_color:   data.primaryColor,
+          secondary_color: data.secondaryColor,
+          fan_base:        data.fanBase,
+          adoption:        data.adoptionPct,
+          premium_mix:     data.premiumMix,
+          games:           data.gamesPerSeason,
+          spend_level:     data.spendLevel,
+          name:            data.contactName,
+          email:           data.contactEmail,
+          role:            data.contactRole,
+          website:         data.contactWebsite,
         }),
       })
 
       if (!res.ok) throw new Error('Failed to save')
 
+      const { results } = await res.json()
       localStorage.setItem('sportech_results', JSON.stringify({ data, results }))
       router.push('/results')
     } catch {

@@ -1,7 +1,9 @@
+import dynamic from 'next/dynamic'
 import type { WizardData, RevenueResults } from '@/lib/types'
-import RevenueBarChart from './RevenueBarChart'
-import ProjectionChart from './ProjectionChart'
 import StreamCards from './StreamCards'
+
+const RevenueBarChart = dynamic(() => import('./RevenueBarChart'), { ssr: false })
+const ProjectionChart = dynamic(() => import('./ProjectionChart'), { ssr: false })
 
 interface Props { data: WizardData; results: RevenueResults }
 

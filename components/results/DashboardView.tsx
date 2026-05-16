@@ -1,7 +1,6 @@
 'use client'
 import type { WizardData, RevenueResults } from '@/lib/types'
 import StreamCards from './StreamCards'
-import RevenueBarChart from './RevenueBarChart'
 import ProjectionChart from './ProjectionChart'
 
 interface Props { data: WizardData; results: RevenueResults }
@@ -73,7 +72,6 @@ export default function DashboardView({ data, results }: Props) {
     <div className="space-y-10">
 
       {/* ── Charts ── */}
-      <RevenueBarChart results={results} primaryColor={data.primaryColor} secondaryColor={data.secondaryColor} />
       <ProjectionChart projection={projection} primaryColor={data.primaryColor} />
       <StreamCards results={results} />
 

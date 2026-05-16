@@ -6,6 +6,7 @@ import type { WizardData, RevenueResults } from '@/lib/types'
 import KpiStrip from '@/components/results/KpiStrip'
 import WinBadges from '@/components/results/WinBadges'
 import DashboardView from '@/components/results/DashboardView'
+import ProjectionChart from '@/components/results/ProjectionChart'
 
 export default function ResultsPage() {
   const router = useRouter()
@@ -79,6 +80,8 @@ export default function ResultsPage() {
         <WinBadges />
 
         <DashboardView data={data} results={results} />
+
+        <ProjectionChart projection={results.projection} primaryColor={data.primaryColor} />
 
         {/* CTA band */}
         <div className="rounded-xl p-8 text-center" style={{ background: 'var(--primary)' }}>

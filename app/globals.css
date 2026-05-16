@@ -2,29 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── DESIGN SYSTEM (ClickHouse-inspired) ── */
 :root {
-  --club-primary: #0f172a;
+  --primary: #faff69;
+  --primary-active: #e6eb52;
+  --primary-disabled: #3a3a1f;
+  --ink: #ffffff;
+  --body: #cccccc;
+  --body-strong: #e6e6e6;
+  --muted: #888888;
+  --muted-soft: #5a5a5a;
+  --hairline: #2a2a2a;
+  --hairline-strong: #3a3a3a;
+  --canvas: #0a0a0a;
+  --surface-soft: #121212;
+  --surface-card: #1a1a1a;
+  --surface-elevated: #242424;
+  --on-primary: #0a0a0a;
+  --on-dark: #ffffff;
+  --accent-emerald: #22c55e;
+  --accent-rose: #ef4444;
+  --accent-blue: #3b82f6;
+
+  /* club brand (overridden via JS) */
+  --club-primary: #faff69;
   --club-secondary: #3b82f6;
 }
 
 html {
   scroll-behavior: smooth;
+  background: var(--canvas);
 }
 
-/* Blurred overlay glass effect */
-.blur-overlay {
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Smooth range slider */
+/* ── RANGE SLIDER ── */
 input[type='range'] {
   -webkit-appearance: none;
   appearance: none;
-  height: 6px;
-  border-radius: 3px;
-  background: #e2e8f0;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--hairline-strong);
   outline: none;
+  width: 100%;
 }
 
 input[type='range']::-webkit-slider-thumb {
@@ -33,17 +57,38 @@ input[type='range']::-webkit-slider-thumb {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--club-primary);
+  background: var(--primary);
   cursor: pointer;
-  border: 2px solid white;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  border: 2px solid var(--canvas);
+  box-shadow: 0 0 0 1px var(--primary);
+  transition: transform 0.1s;
+}
+
+input[type='range']::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
 }
 
 input[type='range']::-moz-range-thumb {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: var(--club-primary);
+  background: var(--primary);
   cursor: pointer;
-  border: 2px solid white;
+  border: 2px solid var(--canvas);
+}
+
+/* ── BLUR OVERLAY ── */
+.blur-overlay {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* ── ANIMATE IN ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-in {
+  animation: fadeIn 0.25s ease both;
 }

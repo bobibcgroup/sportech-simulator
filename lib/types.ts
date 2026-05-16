@@ -9,9 +9,9 @@ export interface WizardData {
   secondaryColor: string
   // Step 3
   fanBase: number
-  adoptionPct: number      // 0.01–0.20
-  premiumMix: number       // 0.05–0.40
-  gamesPerSeason: number   // 20–80
+  adoptionPct: number      // 0.01–1.00
+  premiumMix: number       // 0.01–1.00
+  gamesPerSeason: number   // 1–80
   spendLevel: 'low' | 'standard' | 'high'
   // Step 5
   contactName: string

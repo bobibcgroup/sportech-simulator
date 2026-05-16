@@ -58,9 +58,9 @@ export const GROWTH_RATES = [1, 1.15, 1.15 * 1.18, 1.15 * 1.18 * 1.20, 1.15 * 1.
 export const WIZARD_DEFAULTS = {
   adoptionPct: 0.04,
   premiumMix: 0.18,
-  gamesPerSeason: 40,
+  gamesPerSeason: 38,
   spendLevel: 'standard' as const,
-  primaryColor: '#0f172a',
+  primaryColor: '#faff69',
   secondaryColor: '#3b82f6',
 }
 
